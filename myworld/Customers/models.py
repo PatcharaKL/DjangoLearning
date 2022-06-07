@@ -19,3 +19,15 @@ class Customers(models.Model):
     
     def __str__(self):
         return self.fname
+
+
+class Products(models.Model):
+    product_id = models.AutoField(primary_key=True)
+    product_name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    price = models.IntegerField()
+    rating = models.CharField(max_length=1, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'products'

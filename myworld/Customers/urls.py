@@ -1,9 +1,12 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-router = routers.DefaultRouter()
-router.register(r'Customer', views.CustomerViewSet)
+customerRouter = routers.SimpleRouter()
+productRouter = routers.SimpleRouter()
+customerRouter.register(r'Customer', views.CustomerViewSet)
+productRouter.register(r'Products', views.ProductsViewSet)
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', include(customerRouter.urls)),
+    path('', include(productRouter.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

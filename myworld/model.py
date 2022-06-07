@@ -8,44 +8,6 @@
 from django.db import models
 
 
-class CartItem(models.Model):
-
-    class Meta:
-        managed = False
-        db_table = 'Cart_item'
-
-
-class Customers(models.Model):
-    customer_id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=255)
-    fname = models.CharField(max_length=255)
-    lname = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    phone = models.CharField(max_length=255)
-    gender = models.CharField(max_length=1)
-    birth_date = models.DateField()
-
-    class Meta:
-        managed = False
-        db_table = 'Customers'
-
-
-class Order(models.Model):
-
-    class Meta:
-        managed = False
-        db_table = 'Order'
-
-
-class PaymentDetail(models.Model):
-
-    class Meta:
-        managed = False
-        db_table = 'Payment_detail'
-
-
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -115,6 +77,35 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
+class CartItem(models.Model):
+    cart_item_id = models.AutoField(primary_key=True)
+    total = models.IntegerField()
+    quantity = models.IntegerField()
+    customer = models.ForeignKey('Customers', models.DO_NOTHING)
+    product = models.ForeignKey('Products', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'cart_item'
+
+
+class Customers(models.Model):
+    customer_id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=255)
+    fname = models.CharField(max_length=255)
+    lname = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=255)
+    gender = models.CharField(max_length=1)
+    birth_date = models.DateField()
+
+    class Meta:
+        managed = False
+        db_table = 'customers'
+
+
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
     object_id = models.TextField(blank=True, null=True)
@@ -158,6 +149,28 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
+
+
+class Order(models.Model):
+    order_id = models.AutoField(primary_key=True)
+    quantity = models.IntegerField()
+    total = models.IntegerField()
+    customer = models.ForeignKey(Customers, models.DO_NOTHING)
+    product = models.ForeignKey('Products', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'order'
+
+
+class PaymentDetail(models.Model):
+    payment_id = models.AutoField(primary_key=True)
+    amount = models.IntegerField()
+    order = models.ForeignKey(Order, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'payment_detail'
 
 
 class Products(models.Model):
